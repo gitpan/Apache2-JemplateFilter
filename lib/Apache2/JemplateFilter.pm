@@ -11,7 +11,7 @@ use Apache2::Response   ();
 use Apache2::Log        ();
 use APR::Finfo          ();
 use APR::Brigade        ();
-use Jemplate 0.10;
+use Jemplate 0.12;
 
 our $cache = {};
 
@@ -21,7 +21,7 @@ Apache2::JemplateFilter - Jemplate complie filter for Apache2
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -33,6 +33,12 @@ in httpd.conf
     </Location>
 
 Requests for /foo/tmpl/* are compiled by Jemplate.
+
+=head1 DESCRIPTION
+
+This module is Jemplate complie filter for Apache2 (mod_perl2).
+
+For Apache1.x (mod_perl1.x), use L<Apache::JemplateFilter>.
 
 =head1 FUNCTIONS
 
@@ -69,8 +75,10 @@ sub handler {
               . $jemplate->compile_template_content( $buf, $tmpl_filename );
         };
         if ($@) {
-            my $msg =
-              __PACKAGE__ . " compile error while processing $filename. $@";
+            my $msg = sprintf "%s compile error while processing %s. %s",
+              __PACKAGE__,
+	      $f->r->uri,
+	      $@;
             $msg =~ s/\'/\\'/g;         # '
             $msg =~ s/[\x0A\x0D]/ /g;
             $js = "throw('$msg')";
@@ -83,6 +91,10 @@ sub handler {
     }
     return Apache2::Const::OK;
 }
+
+=head1 SEE ALSO
+
+L<Jemplate> L<Apache::JemplateFilter>
 
 =head1 AUTHOR
 

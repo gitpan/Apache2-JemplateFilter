@@ -22,7 +22,7 @@ ModPerl::MM::WriteMakefile(
     VERSION       => '0',
     PREREQ_PM     => {
         'Test::More' => 0,
-        'Jemplate'   => '0.10',
+        'Jemplate'   => '0.12',
         'mod_perl2'  => 0,
         'APR::Finfo' => 0,
     },
